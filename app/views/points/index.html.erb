@@ -1,73 +1,83 @@
 <div class="background">
   <div class="overlay">
     <div class="content">
-        <div id="chamada">
+      <div class="class="col-xs-12 col-md-6 col-offset-md-3"">
+        <div id="chamada" >
           <h1>Lorem Ipsum Dolor</h1>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip</p>
         </div>
-        <div class="box-principal">
-            <div id="custom-search">
-              <input type="text" placeholder="Cidade..."/>
-              <input class="btn_search" value="submit" type="submit">
-            </div>
         </div>
     </div>
   </div>
+
 </div>
 <section class="section">
+
     <div class="container">
-    <div class="header">
-        <h3>Explore o que tem <span>por perto</span></h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
-        <span class="tb"><em></em></span>
-    </div>
-      <div class="content">
+      <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+          <div class="header">
+              <h3>Explore o que tem <span>por perto</span></h3>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
+              <span class="tb"><em></em></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row content">
         <div class="col-xs-12 col-md-6">
-          <div class="col-md-6">
+          <div class="col-xs-6">
             <div class="box">
                 <span id="circulo">
-                  21
+                  4
                 </span>
-               <span class="glyphicon glyphicon-heart-empty"></span>
+               <span><i class="fa fa-building-o" aria-hidden="true"></i></span>
                <h4>Pontos Turisticos</h4>
                <p>Conheça os principais pontos turisticos </p>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-xs-6">
             <div class="box">
                 <span id="circulo">
-                  21
+                3
                 </span>
-               <span class="glyphicon glyphicon-heart-empty"></span>
+               <span> <i class="fa fa-user-secret" aria-hidden="true"></i> </span>
                <h4>Segurança</h4>
                <p>Obtenha informações de criminalidade de uma região</p>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-xs-6">
             <div class="box">
                 <span id="circulo">
-                  21
+                  4
                 </span>
-               <span class="glyphicon glyphicon-heart-empty"></span>
-               <h4>Pontos Turisticos</h4>
-               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+               <span><i class="fa fa-smile-o" aria-hidden="true"></i></span>
+               <h4>Entretenimento</h4>
+               <p>Saiba os melhores locais para se divertir.</p>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-xs-6">
             <div class="box">
                 <span id="circulo">
-                  21
+                  2
                 </span>
-               <span class="glyphicon glyphicon-heart-empty"></span>
-               <h4>Pontos Turisticos</h4>
-               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+               <span><i class="fa fa-cutlery" aria-hidden="true"></i></span>
+               <h4>Gastronomia</h4>
+               <p>Alimente-se e tenha experiencias incriveis nos melhores lugares</p>
             </div>
           </div>
         </div>
         <div class="col-xs-12 col-md-6">
           <div id="map"></div>
+          <a id="novo" href="/points/new">Cadastrar novo local</a>
         </div>
       </div>
+    </div>
+    <div class="box-principal">
+        <div id="custom-search">
+          <input type="text" placeholder="Cidade..." id="cidade"/>
+          <input class="btn_search" value="submit" type="submit">
+        </div>
     </div>
 </section>
 
@@ -78,26 +88,49 @@
     var map;
     var geocoder;
     var openedInfoWindow = null;
+    var myLatlng;
+
+
     function initMap(){
-      console.log("INICIANDO....")
-        var myLatlng = new google.maps.LatLng(-14.235004,-51.92528);
-        geocoder = new google.maps.Geocoder();
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: myLatlng,
-          zoom: 4,
-          mapTypeControl: false,
-          zoomControl: true,
-          zoomControlOptions: {
-              position: google.maps.ControlPosition.RIGHT_CENTER
-          },
-          scaleControl: false,
-        });
-        loadingPoints();
+        // Verifica se o browser do usuario tem suporte a Geolocation
+        if ( navigator.geolocation ){
+          navigator.geolocation.getCurrentPosition(function(posicao ){
+            console.log(posicao.coords.latitude)
+            console.log(posicao.coords.longitude)
+            myLatlng = new google.maps.LatLng(posicao.coords.latitude, posicao.coords.longitude);
+            geocoder = new google.maps.Geocoder();
+            funcao(myLatlng);
+          });
+        }else{
+          myLatlng = new google.maps.LatLng(-14.235004,-51.92528);
+          geocoder = new google.maps.Geocoder();
+          funcao(myLatlng);
+        }
+
+
     }
-    function loadingPoints() {
+
+    function funcao(myLatlng){
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: myLatlng,
+        zoom: 12,
+        mapTypeControl: false,
+        zoomControl: true,
+        zoomControlOptions: {
+            position: google.maps.ControlPosition.RIGHT_CENTER
+        },
+        scaleControl: false,
+      });
+      loadingPoints(map);
+    }
+    function loadingPoints(map) {
+      console.log('pontos')
+      console.log(map)
       $.each(pointList, function(i, point) {
+        console.log(point.category.name)
           var marker = new google.maps.Marker({
               position: new google.maps.LatLng(point.lat, point.lng),
+              icon: '/imagens/pin-'+point.category.id+'.png',
               animation: google.maps.Animation.DROP,
               map: map
           });
@@ -149,6 +182,33 @@
           })(marker));
       });
     }
+
+    $('#cidade').keyup(function(){
+      var cidade = $(this).val();
+
+      if(cidade.length >= 3){
+        atualizar(cidade);
+      }
+    })
+
+    function atualizar(address) {
+        geocoder.geocode({ 'address': address + ', Brasil', 'region': 'BR' }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                  console.log(results[0]);
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+                    var location = new google.maps.LatLng(latitude, longitude);
+                    var fenway = {lat:latitude,lng:longitude}
+                    map.setCenter(location);
+                    map.setZoom(13);
+                }
+            }
+        });
+      }
+
+
+
     // $('.filter-category').click(function(){
     //   $('.filter-category').removeClass('active');
     //   $(this).addClass('active');
@@ -169,4 +229,16 @@
     //     $('.close').click(function(){
     //   $('.tool-content').css('left','100%');
     // })
+
+
+    $(document).ready(function(){
+      $('#cidade').keypress(function(e) {
+          if(e.which == 13) {
+            console.log("sadad")
+            $('html, body').animate({
+                scrollTop: $('#simulate').offset().top,
+              }, 700);
+          }
+      });
+    })
 </script>
