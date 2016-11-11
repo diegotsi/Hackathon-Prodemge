@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 20161111115355) do
     t.datetime "updated_at", null: false
   end
 
-# Could not dump table "points" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+
 
 end
