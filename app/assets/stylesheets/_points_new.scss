@@ -1,0 +1,62 @@
+.points{
+	&.new{
+		#gravando{
+			background-color:#FF355E;
+			position: absolute;
+			height: 100vh;
+			width: 100%;
+			z-index:1000;
+			display:block;
+			transform:translateX(-150%);
+			transition:all 0.3s;
+			position: fixed;
+			top: 0;
+			.img-gravando{
+				width: 100%;
+				position: relative;
+				img{
+					vertical-align: middle;
+					margin-top: 100px;
+				}
+				h4{
+					color: #fff;
+					font-weight: 800;
+					font-size: 30px;
+					margin-top:20px;
+				}
+				#base64{
+					background:#fff;
+					color:#FF355E;
+					padding: 10px;
+					text-transform: uppercase;
+					border: none;
+					border:1px solid #efefef;
+					border-radius:5px;
+				}
+			}
+		}
+		.form-group{
+			width: 100%;
+			input[type="text"]{
+				width: 100%;
+				padding: 20px;
+				border-top: none;
+				border-right: none;
+				border-left: none;
+				width: 100%;
+			}
+			input[type="text"]:focus{
+				border-color:#000;
+				box-shadow: none;
+			}
+		}
+		.field{
+			select{
+				width: 80%;
+				padding: 10px;
+				border:2px solid #ededed;
+				background-color: #fff;
+			}
+		}
+	}
+}

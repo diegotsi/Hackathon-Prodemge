@@ -1,115 +1,125 @@
 <%- model_class = Point -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => [:'helpers.titles.new', 'New %{model}'], :model => model_class.model_name.human.titleize %></h1>
-</div>
-
-<div class="col-xs-12 col-md-6">
-  <%= form_for @point, :html => { :class => "form-horizontal point" } do |f| %>
-    <% if @point.errors.any? %>
-      <div id="error_expl" class="panel panel-danger">
-        <div class="panel-heading">
-          <h3 class="panel-title"><%= pluralize(@point.errors.count, "error") %> prohibited this point from being saved:</h3>
-        </div>
-        <div class="panel-body">
-          <ul>
-          <% @point.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-          </ul>
+<div id="gravando">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-md-offset-4">
+        <div class="img-gravando">
+          <img src="/imagens/microphone.png"/>
+          <h4>Gravando...</h4>
+          <button class="button disabled one" id="base64">
+            Finalizar
+          </button>
         </div>
       </div>
-    <% end %>
+  </div>
+  </div>
+</div>
+<div class="container">
+  <div class="page-header">
+    <h1>Novo local</h1>
+  </div>
 
-    <%= f.hidden_field :lat, :class => 'form-control' %>
-    <%= f.hidden_field :lng, :class => 'form-control' %>
-
-
-    <div id="content">
-          <h2>Record, Play & Download Microphone Voice</h2>
-          <audio controls src="" id="audio"></audio>
-          <div style="margin:10px;">
-            <a class="button" id="record">Gravar</a>
-            <a class="button disabled one" id="stop">Reiniciar</a>
-            <a class="button disabled one" id="play">Finalizar</a>
-            <a class="button one" id="enviarAudio">Salvar audio</a>
-            <a class="button disabled one" id="download">Download</a>
-            <a class="button disabled one" id="base64">Base64 URL</a>
-            <a class="button disabled one" id="mp3">MP3 URL</a>
+  <div class="col-xs-12 col-md-6">
+    <%= form_for @point, :html => { :class => "form-horizontal point" } do |f| %>
+      <% if @point.errors.any? %>
+        <div id="error_expl" class="panel panel-danger">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= pluralize(@point.errors.count, "error") %> prohibited this point from being saved:</h3>
           </div>
-          <!-- <input class="button" type="checkbox" id="live"/>
-          <label for="live">Live Output</label> -->
-          <style>
-          .button{
-            display: inline-block;
-            vertical-align: middle;
-            margin: 0px 5px;
-            padding: 5px 12px;
-            cursor: pointer;
-            outline: none;
-            font-size: 13px;
-            text-decoration: none !important;
-            text-align: center;
-            color:#fff;
-            background-color: #4D90FE;
-            background-image: linear-gradient(top,#4D90FE, #4787ED);
-            background-image: -ms-linear-gradient(top,#4D90FE, #4787ED);
-            background-image: -o-linear-gradient(top,#4D90FE, #4787ED);
-            background-image: linear-gradient(top,#4D90FE, #4787ED);
-            border: 1px solid #4787ED;
-            box-shadow: 0 1px 3px #BFBFBF;
-          }
-          a.button{
-            color: #fff;
-          }
-          .button:hover{
-            box-shadow: inset 0px 1px 1px #8C8C8C;
-          }
-          .button.disabled{
-            box-shadow:none;
-            opacity:0.7;
-          }
-          </style>
+          <div class="panel-body">
+            <ul>
+            <% @point.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+
+      <%= f.hidden_field :lat, :class => 'form-control' %>
+      <%= f.hidden_field :lng, :class => 'form-control' %>
+
+
+      <div id="content">
+        <div class="form-group">
+        <!--<%= f.label :address, :class => 'control-label col-lg-2' %>-->
+        <div class="col-lg-10">
+          <%= f.text_field :address, :class => 'form-control',:placeholder=> 'Endereco' %>
+        </div>
+      </div>
+
+        <%= f.hidden_field :narracao, :class => 'form-control' %>
+      <div class="form-group">
+        <!--<%= f.label :title, :class => 'control-label col-lg-2' %>-->
+        <div class="col-lg-10">
+          <%= f.text_field :title, :class => 'form-control' ,:placeholder=> 'Nome do ponto'%>
         </div>
 
-
-    <div class="form-group">
-      <%= f.label :address, :class => 'control-label col-lg-2' %>
-      <div class="col-lg-10">
-        <%= f.text_field :address, :class => 'form-control' %>
       </div>
-    </div>
+      <div class="form-group">
+        <!--<%= f.label :description, :class => 'control-label col-lg-2' %>-->
+        <div class="col-lg-10">
+          <%= f.text_field :description, :class => 'form-control',:placeholder=> 'Descricao' %>
+        </div>
 
-      <%= f.hidden_field :narracao, :class => 'form-control' %>
-    <div class="form-group">
-      <%= f.label :title, :class => 'control-label col-lg-2' %>
-      <div class="col-lg-10">
-        <%= f.text_field :title, :class => 'form-control' %>
       </div>
 
-    </div>
-    <div class="form-group">
-      <%= f.label :description, :class => 'control-label col-lg-2' %>
-      <div class="col-lg-10">
-        <%= f.text_field :description, :class => 'form-control' %>
+      <div class="field">
+        <%= f.label :category_id, "Categoria" %><br>
+        <%= f.collection_select(:category_id, Category.all, :id, :name, prompt: true) %>
       </div>
-
-    </div>
-
-    <div class="field">
-      <%= f.label :category_id, "Categoria" %><br>
-      <%= f.collection_select(:category_id, Category.all, :id, :name, prompt: true) %>
-    </div>
-    <div class="form-group">
-      <div class="col-lg-offset-2 col-lg-10">
-        <%= f.submit nil, :class => 'btn btn-primary' %>
-        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                  points_path, :class => 'btn btn-default' %>
+      <audio controls src="" id="audio"></audio>
+            <div style="margin:10px;">
+              <a class="button" id="record">Gravar</a>
+              <a class="button disabled one" id="stop">Reiniciar</a>
+            </div>
+      <div class="form-group">
+        <div class="col-lg-offset-2 col-lg-10">
+          <%= f.submit nil, :class => 'btn btn-primary' %>
+          <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                    points_path, :class => 'btn btn-default' %>
+        </div>
       </div>
-    </div>
-  <% end %>
-</div>
-<div class="col-xs-12 col-sm-6">
-  <div id="map"></div>
+            <!-- <input class="button" type="checkbox" id="live"/>
+            <label for="live">Live Output</label> -->
+            <style>
+            .button{
+              display: inline-block;
+              vertical-align: middle;
+              margin: 0px 5px;
+              padding: 5px 12px;
+              cursor: pointer;
+              outline: none;
+              font-size: 13px;
+              text-decoration: none !important;
+              text-align: center;
+              color:#fff;
+              background-color: #4D90FE;
+              background-image: linear-gradient(top,#4D90FE, #4787ED);
+              background-image: -ms-linear-gradient(top,#4D90FE, #4787ED);
+              background-image: -o-linear-gradient(top,#4D90FE, #4787ED);
+              background-image: linear-gradient(top,#4D90FE, #4787ED);
+              border: 1px solid #4787ED;
+              box-shadow: 0 1px 3px #BFBFBF;
+            }
+            a.button{
+              color: #fff;
+            }
+            .button:hover{
+              box-shadow: inset 0px 1px 1px #8C8C8C;
+            }
+            .button.disabled{
+              box-shadow:none;
+              opacity:0.7;
+            }
+            </style>
+          </div>
+
+    <% end %>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <div id="map"></div>
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -256,7 +266,14 @@ $(document).ready(function(){
       elem.addClass("disabled");
       $("#live").addClass("disabled");
       $(".one").removeClass("disabled");
+      $("#gravando").css("display", "block");
+      $("#gravando").css("transform", "translateX(0)");
     });
+  });
+
+  $(document).on("click", "#base64",function(){
+    $("#gravando").css("display", "none");
+    $("#gravando").css("transform", "translateX(-150%)");
   });
 
   $(document).on("click", "#stop:not(.disabled)", function(){
