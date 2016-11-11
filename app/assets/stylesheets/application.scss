@@ -13,8 +13,9 @@
  *= require_tree .
  *= require_self
  */
- @import "bootstrap-sprockets";
+@import "bootstrap-sprockets";
 @import "bootstrap";
+@import url('https://fonts.googleapis.com/css?family=Raleway');
 @import "_points";
 #map{
   height:100vh;
