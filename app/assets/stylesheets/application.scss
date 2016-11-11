@@ -15,8 +15,9 @@
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";
-@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800');
 @import "_points";
+@import "_points_show";
 #map{
   height:100vh;
   width:100%;
@@ -28,4 +29,10 @@
   padding: 10px;
   background: #fff;
   height: 100vh;
+}
+
+.navbar-default{
+  background-color:transparent;
+  border:none;
+
 }
