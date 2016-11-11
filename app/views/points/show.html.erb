@@ -25,10 +25,11 @@
   <div class="col-md-8">
       <div class="box">
           <div class="voz">
-          <audio src="https://dl.dropboxusercontent.com/s/0t4dxn2rbnzcvti/01%20The%20Miracle%20%28Of%20Joey%20Ramone%29.m4a" controls="controls" loop preload="preload" title="Quermesse - O Teatro Mágico"> <a href="hhttps://dl.dropboxusercontent.com/s/0t4dxn2rbnzcvti/01%20The%20Miracle%20%28Of%20Joey%20Ramone%29.m4a">Joey Ramone</a>
+          <audio src="<%= @point.narracao %>" controls="controls" loop preload="preload" title="<%= @point.title %>">
           </audio>
           </div>
           <h1>Sobre o local</h1>
+
           <p>
             <%= @point.description %>
           </p>

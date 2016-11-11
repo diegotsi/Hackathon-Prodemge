@@ -22,86 +22,151 @@
         <span class="tb"><em></em></span>
     </div>
       <div class="content">
-        <div class="col-md-3">
-          <div class="box">
-              <span id="circulo">
-                21
-              </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Pontos Turisticos</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+        <div class="col-xs-12 col-md-6">
+          <div class="col-md-6">
+            <div class="box">
+                <span id="circulo">
+                  21
+                </span>
+               <span class="glyphicon glyphicon-heart-empty"></span>
+               <h4>Pontos Turisticos</h4>
+               <p>Conheça os principais pontos turisticos </p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="box">
+                <span id="circulo">
+                  21
+                </span>
+               <span class="glyphicon glyphicon-heart-empty"></span>
+               <h4>Segurança</h4>
+               <p>Obtenha informações de criminalidade de uma região</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="box">
+                <span id="circulo">
+                  21
+                </span>
+               <span class="glyphicon glyphicon-heart-empty"></span>
+               <h4>Pontos Turisticos</h4>
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="box">
+                <span id="circulo">
+                  21
+                </span>
+               <span class="glyphicon glyphicon-heart-empty"></span>
+               <h4>Pontos Turisticos</h4>
+               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+            </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="box">
-            <span id="circulo">
-                21
-            </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Eventos</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="box">
-            <span id="circulo">
-                21
-            </span>
-            <span class="glyphicon glyphicon-heart-empty"></span>
-            <h4>Hoteis</h4>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="box">
-              <span id="circulo">
-                21
-              </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Restaurantes</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="box">
-            <span id="circulo">
-                21
-          </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Pontos Turisticos</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="box">
-            <span id="circulo">
-                21
-          </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Pontos Turisticos</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="box">
-            <span id="circulo">
-                21
-          </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Pontos Turisticos</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="box">
-              <span id="circulo">
-                21
-          </span>
-             <span class="glyphicon glyphicon-heart-empty"></span>
-             <h4>Pontos Turisticos</h4>
-             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-          </div>
+        <div class="col-xs-12 col-md-6">
+          <div id="map"></div>
         </div>
       </div>
     </div>
 </section>
+
+<script type="text/javascript">
+    var cities = [];
+    var pointList = <%=raw @point_list.to_json(:include => [:category])%>
+    console.log(pointList)
+    var map;
+    var geocoder;
+    var openedInfoWindow = null;
+    function initMap(){
+      console.log("INICIANDO....")
+        var myLatlng = new google.maps.LatLng(-14.235004,-51.92528);
+        geocoder = new google.maps.Geocoder();
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: myLatlng,
+          zoom: 4,
+          mapTypeControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_CENTER
+          },
+          scaleControl: false,
+        });
+        loadingPoints();
+    }
+    function loadingPoints() {
+      $.each(pointList, function(i, point) {
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(point.lat, point.lng),
+              animation: google.maps.Animation.DROP,
+              map: map
+          });
+          if (point.title.length > 30){
+            point.title = point.title.substr(0,30)+"...";
+          }
+          var url = '/points/'+point.id;
+          var contentString = '<div id="infobox">' +
+                    '<div class="title"><a href="'+url+'"> '+point.title+' </a></div>' +
+                    '<div class="content">' +
+                      '<p>'+point.description.substr(0,120)+'...</p>' +
+                      '<p><a href="'+url+'" class="more">+ detalhes</p>' +
+                    '</div>' +
+                  '</div>';
+          var infowindow = new google.maps.InfoWindow({
+              content: contentString,
+               maxWidth: 265
+          });
+          // INICIO DA PERSONALIZAÇÃO DA INFOWINDOW.
+          // O evento google.maps.event.addListener() espera pela
+          // criação da estrutura HTML da infowindow 'domready'
+          // e antes da abertura da infowindow serão aplicados
+          // os estilos definidos
+          // *
+          google.maps.event.addListener(infowindow, 'domready', function() {
+            // Referência ao DIV que agrupa o fundo da infowindow
+            var iwOuter = $('.gm-style-iw');
+            var iwBackground = iwOuter.prev();
+            // Remover o div da sombra do fundo
+            iwBackground.children(':nth-child(2)').css({'background' : 'rgba(78, 3, 10, 0.9)','border-radius':'15px','position':'relative'});
+            // Remover o div de fundo branco
+            iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+            // Altera a cor desejada para a sombra da cauda
+            iwBackground.children(':nth-child(3)').find('div').children().css({'background': 'rgba(78, 3, 10, 0.9)','top':'4px', 'z-index' : '1'});
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                if (openedInfoWindow !== null){
+                console.log('fechei a outra')
+                openedInfoWindow.close();
+            }else{
+              console.log('nao fechei nada')
+            }
+                infowindow.close();
+                infowindow.setContent(contentString);
+                infowindow.open(map, marker);
+                openedInfoWindow = infowindow;
+            };
+          })(marker));
+      });
+    }
+    // $('.filter-category').click(function(){
+    //   $('.filter-category').removeClass('active');
+    //   $(this).addClass('active');
+    //   var filter = $(this).attr('data-tag');
+    //   if(filter == 'all'){
+    //     markerCluster.setMap(map);
+    //   }else{
+    //     markerCluster.setMap(null);
+    //     setMapOnAll(map,arrMarkers,filter);
+    //   }
+    //   //setMapOnAll(map,arrMarkers,filter);
+    // })
+    //
+    // $('.tool-bar').click(function(){
+    //   $('.tool-content').css('left','0%');
+    // })
+    //
+    //     $('.close').click(function(){
+    //   $('.tool-content').css('left','100%');
+    // })
+</script>
