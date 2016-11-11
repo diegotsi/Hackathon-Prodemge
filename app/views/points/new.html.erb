@@ -20,16 +20,16 @@
       </div>
     <% end %>
 
+    <%= f.hidden_field :lat, :class => 'form-control' %>
+    <%= f.hidden_field :lng, :class => 'form-control' %>
 
-
-    <div class="row">
-          <div class="col-xs-12">
-            <div class="field">
-                <%= f.label :address, "Endereço completo da reclamação"%><br>
-                <%= f.text_field :address %>
-            </div>
-          </div>
+    <div class="form-group">
+      <%= f.label :address, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :address, :class => 'form-control' %>
       </div>
+    </div>
+
 
     <div class="form-group">
       <%= f.label :title, :class => 'control-label col-lg-2' %>
@@ -49,18 +49,6 @@
     <div class="field">
       <%= f.label :category_id, "Categoria" %><br>
       <%= f.collection_select(:category_id, Category.all, :id, :name, prompt: true) %>
-    </div>
-    <div class="form-group">
-      <%= f.label :lat, :class => 'control-label col-lg-2' %>
-      <div class="col-lg-10">
-        <%= f.text_field :lat, :class => 'form-control' %>
-      </div>
-    </div>
-    <div class="form-group">
-      <%= f.label :lng, :class => 'control-label col-lg-2' %>
-      <div class="col-lg-10">
-        <%= f.text_field :lng, :class => 'form-control' %>
-      </div>
     </div>
     <div class="form-group">
       <%= f.label :email, :class => 'control-label col-lg-2' %>
@@ -126,9 +114,10 @@
                 if (results[0]) {
                     var latitude = results[0].geometry.location.lat();
                     var longitude = results[0].geometry.location.lng();
-
-                    $('#point_latitude').val(latitude);
-                    $('#point_longitude').val(longitude);
+                    console.log(latitude);
+                    console.log(longitude)
+                    $('#point_lat').val(latitude);
+                    $('#point_lng').val(longitude);
                     var location = new google.maps.LatLng(latitude, longitude);
                     marker.setPosition(location);
                     map.setCenter(location);
@@ -168,28 +157,28 @@
             loadOnMap($(this).val());
     })
 
-    $("#point_address").autocomplete({
-        source: function (request, response) {
-            geocoder.geocode({ 'address': request.term + ', Brasil', 'region': 'BR' }, function (results, status) {
-                response($.map(results, function (item) {
-                    return {
-                        label: item.formatted_address,
-                        value: item.formatted_address,
-                        latitude: item.geometry.location.lat(),
-                        longitude: item.geometry.location.lng()
-                    }
-                }));
-            })
-        },
-        select: function (event, ui) {
-            $("#point_lat").val(ui.item.latitude);
-            $("#point_lng").val(ui.item.longitude);
-            var location = new google.maps.LatLng(ui.item.latitude, ui.item.longitude);
-            marker.setPosition(location);
-            map.setCenter(location);
-            map.setZoom(16);
-        }
-    });
+    // $("#point_address").autocomplete({
+    //     source: function (request, response) {
+    //         geocoder.geocode({ 'address': request.term + ', Brasil', 'region': 'BR' }, function (results, status) {
+    //             response($.map(results, function (item) {
+    //                 return {
+    //                     label: item.formatted_address,
+    //                     value: item.formatted_address,
+    //                     latitude: item.geometry.location.lat(),
+    //                     longitude: item.geometry.location.lng()
+    //                 }
+    //             }));
+    //         })
+    //     },
+    //     select: function (event, ui) {
+    //         $("#point_lat").val(ui.item.latitude);
+    //         $("#point_lng").val(ui.item.longitude);
+    //         var location = new google.maps.LatLng(ui.item.latitude, ui.item.longitude);
+    //         marker.setPosition(location);
+    //         map.setCenter(location);
+    //         map.setZoom(16);
+    //     }
+    // });
 
     $('#add-photo, .upload-preview ').click(function(){
       $('#point_image').click();
