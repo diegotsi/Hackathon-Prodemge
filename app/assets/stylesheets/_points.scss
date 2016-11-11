@@ -10,8 +10,8 @@ body{
     .background{
       background: image-url("bg.jpg");
       background-size: cover;
-      position: absolute;
-      top: 0;
+      position: relative;
+      top: -70px;
       left: 0;
       right: 0;
       bottom: 0;
@@ -35,25 +35,87 @@ body{
           z-index: 1000;
           opacity:1;
           height: 100vh;
+          #chamada{
+            margin:auto;
+            margin-top:150px;
+            text-align: center;
+            width: 50%;
+            h1{
+              font-weight: 800;
+              font-size: 50px;
+              color:#fff;
+            }
+            p{
+              text-align: center;
+              color:#fff;
+              font-size:15px;
+              margin-top:15px;
+            }
+          }
           .box-principal{
             position:absolute;
-            left:50%;
-            transform: translateX(-50%) translateY(-50%);
-            top:50%;
-            background-color: #fff;
-            height: 300px;
-            width: 500px;
+            bottom:0;
+            background: rgba(255,38,74,0.7);
+            height: auto;
+            width: 100%;
             padding: 15px;
-            input{
-              margin-top:20px;
-              padding: 15px;
-              width: 100%;
+            #custom-search{
+              padding: 0;
+              width: 550px;
+              margin: auto;
+              position: relative;
+              line-height: 1;
+              input[type="text"]{
+                width: 100%;
+                padding: 15px 0 15px 20px;
+                box-sizing: border-box !important;
+                font-size: 16px;
+                border: 0;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+                border-radius: 3px;
+                font-weight: 600;
+                color: #444;
+              }
+              input.btn_search{
+                position: absolute;
+                right: 15px;
+                top: 15px;
+                border: 0;
+                width: 25px;
+                height: 25px;
+                background: url('http://www.ansonika.com/travelguide//img/search.svg') top right no-repeat #fff;
+                cursor: pointer;
+                text-indent: -999px;
+              }
             }
             button{
               margin-top: 20px;
               width: 100%;
               padding: 15px;
             }
+          }
+        }
+      }
+    }
+    section{
+      .header{
+        width: 60%;
+        text-align: center;
+        margin:auto;
+        h3{
+          font-weight: 500;
+          font-size: 35px;
+          span{
+            color:rgb(255,38,74);
+          }
+        }
+        .tb{
+          width: 120px;
+          background-color: #e1e1e1;
+          em{
+            width: 60px;
+            background-color: #ed145b;
           }
         }
       }
