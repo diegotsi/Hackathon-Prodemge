@@ -17,4 +17,6 @@
 //= require jquery.autocomplete.min
 //= require turbolinks
 //= require markerclusterer.min
+//= recorder
+//= jquery.voice
 //= require_tree .

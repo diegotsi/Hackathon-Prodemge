@@ -5,6 +5,7 @@ class CreatePoints < ActiveRecord::Migration
       t.text :description
       t.float :lat
       t.float :lng
+      t.attachment :audio
 
       t.timestamps null: false
     end
