@@ -8,7 +8,7 @@
 
 </head>
 <body class="<%= controller.controller_name %> <%= controller.action_name %>">
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default <%= controller.action_name %>">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -18,7 +18,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><img src="/imagens/logo.png" width="200"/></a>
+        <a class="navbar-brand" href="/points/"><img src="/imagens/logo.png" width="200"/></a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -26,12 +26,15 @@
         <form class="navbar-form navbar-left">
         </form>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Logout</a></li>
+          <li><a href="/points/new/">Cadastrar</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
 <%= yield %>
+<footer>
+  Desenvolvido por IFBQ - Campus Party - 2016
+</footer>
 <script src="https://www.dropbox.com/static/api/dropbox-datastores-1.0-latest.js"></script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCORWu-uTguiEdLaTvsFu74TPvmYE2fNrA&callback=initMap">

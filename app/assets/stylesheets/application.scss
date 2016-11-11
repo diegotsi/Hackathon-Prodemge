@@ -18,6 +18,7 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800');
 @import "_points";
 @import "_points_show";
+@import "_points_new";
 #map{
   height:550px;
   width:100%;
@@ -34,6 +35,12 @@
 .navbar-default{
   background-color:transparent;
   border:none;
+  padding-bottom: 10px;
+  border-radius: none;
+  &.new{
+    background-color:#000;
+  }
+
 
 }
 
@@ -47,4 +54,12 @@ div#infobox {
 div#infobox a {
     color: #fff;
     font-size: 18px;
+}
+
+footer{
+  padding: 15px;
+  text-align: center;
+  color: #fff;
+  background: #FF355E;
+  margin-top:60px;
 }
