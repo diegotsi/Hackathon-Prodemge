@@ -14,8 +14,8 @@
       height: 500px;
       .content{
         position: absolute;
-        bottom:0px;
-
+        bottom: 20px;
+        width: 100%;
         h1,h3{
           color: #fff;
         }
@@ -31,6 +31,9 @@
         #estrelas{
           right:0;
           bottom: 0;
+          padding-top: 80px;
+          padding-right: 40px;  
+          float: right;
         }
       }
       }
@@ -42,9 +45,19 @@
       padding:20px;
       .box{
         background-color:#fff;
-        height: 400px;
+        height: auto;
         border:1px solid #f6f6f6;
         padding:15px;
+        margin: 5px;
+        .curtir{
+          margin-left: 20%;
+          img{
+            margin: 5% 5%;
+          }
+        }
+        .row{
+          font-size: 18px;
+        }
       }
     }
   }
