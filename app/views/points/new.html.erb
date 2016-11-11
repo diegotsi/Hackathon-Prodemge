@@ -2,4 +2,212 @@
 <div class="page-header">
   <h1><%=t '.title', :default => [:'helpers.titles.new', 'New %{model}'], :model => model_class.model_name.human.titleize %></h1>
 </div>
-<%= render :partial => 'form' %>
+
+<div class="col-xs-12 col-md-6">
+  <%= form_for @point, :html => { :class => "form-horizontal point" } do |f| %>
+    <% if @point.errors.any? %>
+      <div id="error_expl" class="panel panel-danger">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= pluralize(@point.errors.count, "error") %> prohibited this point from being saved:</h3>
+        </div>
+        <div class="panel-body">
+          <ul>
+          <% @point.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+
+
+    <div class="row">
+          <div class="col-xs-12">
+            <div class="field">
+                <%= f.label :address, "Endereço completo da reclamação"%><br>
+                <%= f.text_field :address %>
+            </div>
+          </div>
+      </div>
+
+    <div class="form-group">
+      <%= f.label :title, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :title, :class => 'form-control' %>
+      </div>
+
+    </div>
+    <div class="form-group">
+      <%= f.label :description, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :description, :class => 'form-control' %>
+      </div>
+
+    </div>
+
+    <div class="field">
+      <%= f.label :category_id, "Categoria" %><br>
+      <%= f.collection_select(:category_id, Category.all, :id, :name, prompt: true) %>
+    </div>
+    <div class="form-group">
+      <%= f.label :lat, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :lat, :class => 'form-control' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :lng, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :lng, :class => 'form-control' %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.label :email, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :email, :class => 'form-control' %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-lg-offset-2 col-lg-10">
+        <%= f.submit nil, :class => 'btn btn-primary' %>
+        <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  points_path, :class => 'btn btn-default' %>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="col-xs-12 col-sm-6">
+  <div id="map"></div>
+</div>
+
+<script type="text/javascript">
+	  var map;
+    var geocoder;
+    var marker;
+
+    function initMap() {
+      console.log('Inciado')
+      var myLatlng = new google.maps.LatLng(-14.235004,-51.92528);
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: myLatlng,
+        zoom: 8
+      });
+
+      geocoder = new google.maps.Geocoder();
+      marker = new google.maps.Marker({
+          map: map,
+          draggable: true,
+          position: new google.maps.LatLng(-14.235004,-51.92528),
+          animation: google.maps.Animation.DROP
+      });
+
+      $('#point_address').focus();
+      $('#point_address').click();
+
+	  	google.maps.event.addListener(marker, 'drag', function () {
+	        geocoder.geocode({ 'latLng': marker.getPosition() }, function (results, status) {
+	            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                  $('#point_address').val(results[0].formatted_address);
+                  $('#point_lat').val(marker.getPosition().lat());
+                  $('#point_lng').val(marker.getPosition().lng());
+                }
+	            }
+	        });
+	    });
+    }
+
+    function loadOnMap(address) {
+        console.log(address);
+        geocoder.geocode({ 'address': address + ', Brasil', 'region': 'BR' }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+
+                    $('#point_latitude').val(latitude);
+                    $('#point_longitude').val(longitude);
+                    var location = new google.maps.LatLng(latitude, longitude);
+                    marker.setPosition(location);
+                    map.setCenter(location);
+                    map.setZoom(14);
+                }
+            }
+        });
+    }
+
+
+    $('#new_point').submit(function(event){
+
+      $('.overlay').css('display','block');
+
+      if($('#point_image').val() != ""){
+        setTimeout(function(){
+
+          $('#text').text('Enviando imagem...');
+
+          setTimeout(function(){
+              $('#text').text('Recortando imagem e finalizando...');
+          },13000)
+
+        },4000)
+      }else{
+         setTimeout(function(){
+
+          $('#text').text('Finalizando...');
+
+        },3000)
+      }
+
+    })
+
+    $('#point_address').blur(function() {
+        if($(this).val() != "")
+            loadOnMap($(this).val());
+    })
+
+    $("#point_address").autocomplete({
+        source: function (request, response) {
+            geocoder.geocode({ 'address': request.term + ', Brasil', 'region': 'BR' }, function (results, status) {
+                response($.map(results, function (item) {
+                    return {
+                        label: item.formatted_address,
+                        value: item.formatted_address,
+                        latitude: item.geometry.location.lat(),
+                        longitude: item.geometry.location.lng()
+                    }
+                }));
+            })
+        },
+        select: function (event, ui) {
+            $("#point_lat").val(ui.item.latitude);
+            $("#point_lng").val(ui.item.longitude);
+            var location = new google.maps.LatLng(ui.item.latitude, ui.item.longitude);
+            marker.setPosition(location);
+            map.setCenter(location);
+            map.setZoom(16);
+        }
+    });
+
+    $('#add-photo, .upload-preview ').click(function(){
+      $('#point_image').click();
+      $('#add-photo').text('Alterar imagem');
+      return false;
+    })
+
+    var preview = $(".upload-preview img");
+
+    $("#point_image").change(function(event){
+       var input = $(event.currentTarget);
+       var file = input[0].files[0];
+       var reader = new FileReader();
+       reader.onload = function(e){
+           image_base64 = e.target.result;
+           preview.attr("src", image_base64);
+       };
+       reader.readAsDataURL(file);
+    });
+
+</script>

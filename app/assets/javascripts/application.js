@@ -10,8 +10,11 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery2
+//= require bootstrap-sprockets
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require jquery-ui
+//= require jquery.autocomplete.min
 //= require turbolinks
+//= require markerclusterer.min
 //= require_tree .

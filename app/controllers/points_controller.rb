@@ -4,7 +4,7 @@ class PointsController < ApplicationController
   # GET /points
   # GET /points.json
   def index
-    @points = Point.all
+    @point_list = Point.all
   end
 
   # GET /points/1
@@ -69,6 +69,6 @@ class PointsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def point_params
-      params.require(:point).permit(:title, :description, :lat, :lng,:category_id)
+      params.require(:point).permit(:title, :description, :lat, :lng,:category_id,:address)
     end
 end

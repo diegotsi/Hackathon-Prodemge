@@ -1,5 +1,4 @@
 <%= form_for @point, :html => { :class => "form-horizontal point" } do |f| %>
-
   <% if @point.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
@@ -14,7 +13,6 @@
       </div>
     </div>
   <% end %>
-
   <div class="form-group">
     <%= f.label :title, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">

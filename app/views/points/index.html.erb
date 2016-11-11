@@ -1,44 +1,138 @@
-<%- model_class = Point -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
-</div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:title) %></th>
-      <th><%= model_class.human_attribute_name(:description) %></th>
-      <th><%= model_class.human_attribute_name(:lat) %></th>
-      <th><%= model_class.human_attribute_name(:lng) %></th>
-      <th><%= model_class.human_attribute_name(:email) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @points.each do |point| %>
-      <tr>
-        <td><%= link_to point.id, point_path(point) %></td>
-        <td><%= point.title %></td>
-        <td><%= point.description %></td>
-        <td><%= point.lat %></td>
-        <td><%= point.lng %></td>
-        <td><%= point.email %></td>
-        <td><%=l point.created_at %></td>
-        <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_point_path(point), :class => 'btn btn-default btn-xs' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      point_path(point),
-                      :method => :delete,
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-xs btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_point_path,
-            :class => 'btn btn-primary' %>
+<div id="sidebar">
+  <h2>Menu Lateral</h2>
+  <ul>
+    <li>
+      <a href="/points/new">Cadastrar pontos</a>
+    </li>
+    <li>
+      <a href="#!">Link 02</a>
+    </li>
+    <li>
+      <a href="#!">Link 03</a>
+    </li>
+    <li>
+      <a href="#!">Link 04</a>
+    </li>
+    <li>
+      <a href="#!">Link 05</a>
+    </li>
+  </ul>
+</div>
+
+
+<div id="map"></div>
+
+
+<script type="text/javascript">
+    var cities = [];
+    var pointList = <%=raw @point_list.to_json(:include => [:category])%>
+    console.log(pointList)
+    var map;
+    var geocoder;
+    var openedInfoWindow = null;
+
+    function initMap(){
+      console.log("INICIANDO....")
+        var myLatlng = new google.maps.LatLng(-14.235004,-51.92528);
+        geocoder = new google.maps.Geocoder();
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: myLatlng,
+          zoom: 4,
+          mapTypeControl: false,
+          zoomControl: true,
+          zoomControlOptions: {
+              position: google.maps.ControlPosition.RIGHT_CENTER
+          },
+          scaleControl: false,
+        });
+
+        loadingPoints();
+    }
+
+    function loadingPoints() {
+      $.each(pointList, function(i, point) {
+
+          var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(point.lat, point.lng),
+              animation: google.maps.Animation.DROP,
+              map: map
+          });
+
+          if (point.title.length > 30){
+            point.title = point.title.substr(0,30)+"...";
+          }
+          var url = '/points/'+point.id;
+          var contentString = '<div id="infobox">' +
+                    '<div class="title"><a href="'+url+'"> '+point.title+' </a></div>' +
+                    '<div class="content">' +
+                      '<p>'+point.description.substr(0,120)+'...</p>' +
+                      '<p><a href="'+url+'" class="more">+ detalhes</p>' +
+                    '</div>' +
+                  '</div>';
+
+          var infowindow = new google.maps.InfoWindow({
+              content: contentString,
+               maxWidth: 265
+          });
+
+          // INICIO DA PERSONALIZAÇÃO DA INFOWINDOW.
+          // O evento google.maps.event.addListener() espera pela
+          // criação da estrutura HTML da infowindow 'domready'
+          // e antes da abertura da infowindow serão aplicados
+          // os estilos definidos
+          // *
+          google.maps.event.addListener(infowindow, 'domready', function() {
+            // Referência ao DIV que agrupa o fundo da infowindow
+            var iwOuter = $('.gm-style-iw');
+
+            var iwBackground = iwOuter.prev();
+            // Remover o div da sombra do fundo
+            iwBackground.children(':nth-child(2)').css({'background' : 'rgba(78, 3, 10, 0.9)','border-radius':'15px','position':'relative'});
+
+            // Remover o div de fundo branco
+            iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+            // Altera a cor desejada para a sombra da cauda
+            iwBackground.children(':nth-child(3)').find('div').children().css({'background': 'rgba(78, 3, 10, 0.9)','top':'4px', 'z-index' : '1'});
+          });
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                if (openedInfoWindow !== null){
+                console.log('fechei a outra')
+                openedInfoWindow.close();
+            }else{
+              console.log('nao fechei nada')
+            }
+                infowindow.close();
+                infowindow.setContent(contentString);
+                infowindow.open(map, marker);
+                openedInfoWindow = infowindow;
+            };
+          })(marker));
+      });
+    }
+
+
+    // $('.filter-category').click(function(){
+    //   $('.filter-category').removeClass('active');
+    //   $(this).addClass('active');
+    //   var filter = $(this).attr('data-tag');
+    //   if(filter == 'all'){
+    //     markerCluster.setMap(map);
+    //   }else{
+    //     markerCluster.setMap(null);
+    //     setMapOnAll(map,arrMarkers,filter);
+    //   }
+    //   //setMapOnAll(map,arrMarkers,filter);
+    // })
+    //
+    // $('.tool-bar').click(function(){
+    //   $('.tool-content').css('left','0%');
+    // })
+    //
+    //     $('.close').click(function(){
+    //   $('.tool-content').css('left','100%');
+    // })
+
+</script>
