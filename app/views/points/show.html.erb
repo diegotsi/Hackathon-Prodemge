@@ -1,4 +1,5 @@
 <div class="bg">
+    <div class="overlay"></div>
     <div class="content">
       <div class="container">
       <div class="row">
@@ -21,11 +22,12 @@
 </div>
 <div class="limpar">
 </div>
+<div class="container">
 <div class="corpo">
   <div class="col-md-8">
       <div class="box">
           <div class="voz">
-          <audio src="<%= @point.narracao %>" controls="controls" loop preload="preload" title="<%= @point.title %>">
+          <audio autoplay src="<%= @point.narracao %>" controls="controls" preload="preload" title="<%= @point.title %>">
           </audio>
           </div>
           <h1>Sobre o local</h1>
@@ -62,4 +64,5 @@
         </div>
       </div>
   </div>
+</div>
 </div>

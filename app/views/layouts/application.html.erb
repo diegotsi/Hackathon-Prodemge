@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Turismo</title>
+  <title>Pé na Estrada</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -9,7 +11,7 @@
 </head>
 <body class="<%= controller.controller_name %> <%= controller.action_name %>">
   <nav class="navbar navbar-default <%= controller.action_name %>">
-    <div class="container-fluid">
+    <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -32,6 +34,7 @@
     </div><!-- /.container-fluid -->
   </nav>
 <%= yield %>
+<div class="limpar"></div>
 <footer>
   Desenvolvido por IFBQ - Campus Party - 2016
 </footer>

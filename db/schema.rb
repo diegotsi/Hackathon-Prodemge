@@ -24,14 +24,20 @@ ActiveRecord::Schema.define(version: 20161111143349) do
     t.text     "description"
     t.float    "lat"
     t.float    "lng"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.string   "audio_file_name"
+    t.string   "audio_content_type"
+    t.integer  "audio_file_size"
+    t.datetime "audio_updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.integer  "category_id"
+    t.integer  "audio_id"
     t.string   "address"
     t.binary   "audio"
-    t.text     "narracao",    limit: 10485760
+    t.text     "narracao",           limit: 10485760
   end
 
+  add_index "points", ["audio_id"], name: "index_points_on_audio_id"
   add_index "points", ["category_id"], name: "index_points_on_category_id"
 
 end

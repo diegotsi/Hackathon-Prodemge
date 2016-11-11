@@ -38,12 +38,13 @@
   padding-bottom: 10px;
   border-radius: none;
   &.new{
+
     background-color:#000;
   }
-
-
 }
-
+body > .navbar-default.index > div > div.navbar-header > a{
+  display:none;
+}
 .navbar-default .navbar-nav > li > a{
 	color: #fff;
 }
