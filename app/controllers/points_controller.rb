@@ -17,6 +17,18 @@ class PointsController < ApplicationController
     @point = Point.new
   end
 
+  def enviar_audio
+    input = params["file"]
+    logger.debug input.filename
+    logger.debug "---------------------"
+
+    File.open(filename, 'wb') do |f|
+      f.write blob
+    end
+
+    render json: "ok"
+  end
+
   # GET /points/1/edit
   def edit
   end
@@ -24,6 +36,8 @@ class PointsController < ApplicationController
   # POST /points
   # POST /points.json
   def create
+    logger.debug "*********************************************************"
+    logger.debug params
     @point = Point.new(point_params)
 
     respond_to do |format|
@@ -69,6 +83,6 @@ class PointsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def point_params
-      params.require(:point).permit(:title, :description, :lat, :lng,:category_id,:address)
+      params.require(:point).permit(:title, :description, :lat, :lng,:category_id,:address,:narracao)
     end
 end
